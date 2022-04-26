@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func customHttpErrHandler(err error, c echo.Context) {
@@ -40,6 +41,7 @@ func StartServer(maping HandlerMapingFunc) {
 	}
 	e.Renderer = t
 	e.HTTPErrorHandler = customHttpErrHandler
+	e.Use(middleware.Logger())
 	maping(e)
 	e.Logger.Fatal(e.Start(":" + getPort()))
 }
