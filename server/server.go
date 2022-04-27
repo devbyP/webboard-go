@@ -41,7 +41,7 @@ func StartServer(maping HandlerMapingFunc) {
 	}
 	e.Renderer = t
 	e.HTTPErrorHandler = customHttpErrHandler
-	e.Use(middleware.Logger())
+	e.Use(customLogger())
 	maping(e)
 	e.Logger.Fatal(e.Start(":" + getPort()))
 }
@@ -51,4 +51,11 @@ func getPort() (port string) {
 		port = "8000"
 	}
 	return
+}
+
+// development version
+func customLogger() echo.MiddlewareFunc {
+	return middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "method:${method}, uri:${uri}, status:${status} ip:${remote_ip}\n",
+	})
 }
