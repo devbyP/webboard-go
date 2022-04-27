@@ -1,0 +1,110 @@
+/* global style */
+* {
+  padding: 0;
+  font-family: "Soleil", Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* var */
+:root {
+  --app-width-max: 1240px;
+
+  /* colors */
+  --light: #FFFFFF;
+  --black-text: #000000;
+  --white-text: #FFFFFF;
+  --dark: #1d2024;
+  --midground: #2a2b31;
+  --midground-surface: #36373f;
+  --foreground: #6a6d72;
+  --primary: #8b4597;
+  --primary-saturate: #ad0ace;
+  --primary-variant: #675679;
+  --secondary: #928a5e;
+  --secondary-saturate: #cfb730;
+  --secondary-variant: #6b724d;
+
+  --error: #A00030;
+
+  --link: #17fd7f;
+  --link-active: #aebb3c;
+  --link-visited: #91186c;
+}
+
+body {
+  margin: 0;
+  background-color: var(--midground-surface);
+  color: var(--white-text);
+}
+
+.content-wrapper {
+  max-width: var(--app-width-max);
+  margin: 0 auto;
+  padding: 5px 12px;
+}
+
+/* text style */
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2.1rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+p, span {
+  font-size: 1rem;
+}
+
+button {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+/* button style */
+button {
+  background: transparent;
+  border: 1px solid var(--light);
+  color: var(--white-text);
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 4px 12px;
+}
+
+/* header style */
+header {
+  position: relative;
+  width: 100vw;
+  background-color: var(--dark);
+}
+
+/* top navigation tab style */
+nav {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 75px;
+  max-width: var(--app-width-max);
+  margin: 0 auto;
+  padding: 5px 12px;
+}
+
+.nav-list {
+  position: relative;
+  display: flex;
+}
+
+.nav-list * {
+  margin-left: 14px;
+}
+
+/* list style */
+ul {
+  list-style: none;
+}
