@@ -1,11 +1,10 @@
-package server
+package web
 
 import (
 	"net/http"
 	"time"
 
-	"github.com/devbyP/webboard/handlers"
-	"github.com/devbyP/webboard/models"
+	models "github.com/devbyP/webboard/pkgs/storage/db-gorm"
 	"github.com/labstack/echo/v4"
 )
 
@@ -60,5 +59,5 @@ func URLMapping(e *echo.Echo) {
 		}
 		return c.Render(http.StatusOK, "profile.tmpl", user)
 	})
-	e.GET("/post/:id", handlers.GetPost(models.GetGorm()))
+	e.GET("/post/:id", GetPost(models.GetGorm()))
 }

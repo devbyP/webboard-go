@@ -1,11 +1,11 @@
-package handlers
+package web
 
 import (
 	"net/http"
 	"strconv"
 	"time"
 
-	"github.com/devbyP/webboard/models"
+	models "github.com/devbyP/webboard/pkgs/storage/db-gorm"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -50,31 +50,52 @@ type homePost struct {
 	EditedAt  time.Time
 }
 
-type homeContext struct {
-	Posts []homePost
+func (hp *homePost) getPost(p *models.Post) {
+	hp.ID = p.ID
+	hp.Content = p.Content
+	hp.EditedAt = p.UpdatedAt
+	hp.PostAt = p.CreatedAt
+	hp.ShortDesc = p.Content
+	hp.Title = p.Title
 }
 
-func (hc *homeContext) appendPost(post homePost) {
+type homeContext struct {
+	Posts []*homePost
+}
+
+func (hc *homeContext) appendPost(post *homePost) {
 	hc.Posts = append(hc.Posts, post)
+}
+
+var postPerPage int = 10
+
+func getCurrentPage(c echo.Context) int {
+	pageNum, err := getParamIDNum(c, "page")
+	if err != nil {
+		return 1
+	}
+	return pageNum
 }
 
 func GetPosts(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		page, err := getParamIDNum(c, "page")
-		if err != nil || page <= 0 {
-			page = 1
-		}
-		limit := 10
+		page := getCurrentPage(c)
+		limit := postPerPage
 		offset := (page - 1) * limit
-		rows, err := db.Model(&models.Post{}).Order("created_at").Limit(limit).Offset(offset).Rows()
+
+		post := &models.Post{}
+		hc := &homeContext{}
+
+		posts, err := post.GetAllPosts(db, limit, offset)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, "Error Getting post from server.")
 		}
 
-		for rows.Next() {
-			post := models.Post{}
-			db.ScanRows(rows, &post)
+		for _, ps := range posts {
+			hp := &homePost{}
+			hp.getPost(ps)
+			hc.appendPost(hp)
 		}
-		return c.Render(http.StatusOK, "home.tmpl", homeContext{})
+		return c.Render(http.StatusOK, "home.tmpl", hc)
 	}
 }
